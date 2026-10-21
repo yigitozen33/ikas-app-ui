@@ -24,6 +24,8 @@ Birden çok bölümü olan uygulama bölümler arasında `PageNav` ile geçer (`
 | Kayıt listesi | `RecordTable` | Tablo verisi için kart grid'i |
 | Gösterilecek bir şey yok | `EmptyState` | Gri bir "Veri yok" yazısı |
 | Plan dışı (kilitli) özellik | `FeatureGate` (`variant="overlay"` liste/kart üstüne, `"banner"`, `"inline"`, `"action"` tek butona; `plan`, `onUpgrade`) | "Pro'ya geç" yazan `EmptyState`, kendi kilit kartı, gri `disabled` buton |
+| Veri yükleniyor | Bileşenin `loading`'i (`RecordTable`, `BarChart`, `AreaChart`); yoksa gerçek içerik `<Skeleton loading>` ile sarılır | Sayfanın ortasında spinner, elle ölçü uydurulmuş gri kutular |
+| Bir eylem sürüyor (kaydet, kur, tekrar dene) | O eylemin butonunda `Button loading` | Tüm sayfayı kilitleyen yükleme ekranı, butonun yanında ayrı spinner |
 | Liste veya bölüm yüklenemedi | `RecordTable error` + `onRetry`, bölümde `EmptyState status="danger"` + `onRetry` | Boş tablo, kırmızı düz metin |
 | Kalıcı geri bildirim | `status` ile `Banner` | Renkli `<div>`'ler, emoji, alert() |
 | Geçici geri bildirim | `sonner` paketinden `toast`; kökte bir kez `@/components/ui/sonner` içinden `Toaster` | "Kaydedildi!" için banner |
@@ -94,10 +96,27 @@ Kendin yazmadan önce eksik olanı `npx shadcn@latest add @ikas/<name>` ile kur.
 
 ## 4. Durumlar isteğe bağlı değil
 
-Veriye dayalı her ekran şunları karşılar: **yükleniyor** (sayfanın ortasında spinner değil,
-`RecordTable loading` veya `Skeleton` ile iskeletler), **boş** (`EmptyState`), **hata**
+Veriye dayalı her ekran şunları karşılar: **yükleniyor** (aşağıdaki kurallar), **boş** (`EmptyState`), **hata**
 (bölüm 1'deki gibi yerinde; sayfanın geri kalanı çalışıyorsa tekrar dene aksiyonlu `Banner status="danger"`)
 ve **başarı** (`toast`).
+
+**Yükleniyor** her bileşende aynı mantıkla çalışır:
+
+- Eylem bekleniyorsa o eylemin butonunda `Button loading`. Spinner yalnızca buton, toast ve
+  satır içi durumlarda (`AnimatedBadge`) görünür; sayfanın veya bölümün ortasında asla.
+- Yapısı bilinen veri bekleniyorsa iskelet: bileşenin kendi `loading`'i varsa onu kullan
+  (`RecordTable`, `BarChart`, `AreaChart`). Yoksa gerçek içeriği sar:
+  `<Skeleton loading={isLoading}><span>{formatMoney(total)}</span></Skeleton>`. İçerik görünmez ama
+  yerini korur, yüklenince hiçbir şey kaymaz. Elle ölçü verilen `<Skeleton className="h-4 w-20" />`
+  yalnızca sarılacak içerik henüz yoksa (ör. satırları bilinmeyen liste).
+- Veriden gelmeyen şeyler gerçek kalır: başlık, sekmeler, filtreler, sütun adları. Buton, input,
+  toast, menü ve modalın kendisi iskelet olmaz.
+- İskelet görünümü (`pulse` ya da `shimmer`) uygulamada bir kez seçilir: kökte
+  `<SkeletonProvider variant="...">`. Tablo, grafik ve sarılmış içerik ona uyar; tek tek `variant` verme.
+- Yeniden yüklemelerde (filtre, sayfa değişimi, tekrar dene) `useDelayedLoading(isLoading)` kullan:
+  hızlı yüklemede iskelet hiç görünmez, görünürse yanıp sönmez. İlk yüklemede `loading`'i doğrudan ver.
+- `aria-busy` bekleyen bölgeye bir kez konur, her bloğa değil.
+
 **Kilitli** boş demek değildir: plan dışı bir özellik `FeatureGate` ile kilitlenir, `EmptyState` ile anlatılmaz;
 içerik görünür ama tıklanmaz kalır.
 
