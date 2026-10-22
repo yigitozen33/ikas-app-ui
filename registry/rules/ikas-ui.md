@@ -41,7 +41,11 @@ Birden çok bölümü olan uygulama bölümler arasında `PageNav` ile geçer (`
 | Kullanıcının belirlediği sıra (öncelik, kart içi iş listesi) | `SortableStack` (tutamaç ve klavyeyle taşıma, `SortableStackUndo`; kalıcı sıra için `onItemsChange` ile kaydedin) | Yukarı/aşağı ok butonları, tüm satırı sürüklenebilir yapmak, elle yazılmış sürükle-bırak |
 | Açık/koyu görünüm seçimi | `ThemeSwitch` (`theme`, `onThemeChange`, `transition`) | Elle yazılmış güneş/ay butonu, kendi sayfa geçişi |
 | Aç/kapa özellik + ayarları | `ToggleSection` | Switch'in yanında hep görünen ayar formu |
-| İlk kurulum adımları | `Launchpad` (adım başına `eta`, sıra gerekiyorsa `requires`) | Ekranda dağınık "önce şunu yapın" banner'ları |
+| İlk kurulum adımları | `Launchpad` (adım başına `eta`, sıra gerekiyorsa `requires`); kullanıcı adımları kendisi işaretliyorsa `layout="checklist"` + `onStepToggle` | Ekranda dağınık "önce şunu yapın" banner'ları |
+| Sıralı sihirbaz (3–6 adım) | `Steps` (`orientation="horizontal"`, başlıkta yer yoksa `"compact"`, açıklamalı uzun akışta `"vertical"`); hata adımın `error`'ında | Elle numaralanmış daireler, "Adım 2/5" yazısıyla yetinmek |
+| Boyutu bilinen iş (aktarım, eşitleme) | `ProgressBar` (`value`/`max`, toplam henüz yoksa `indeterminate`, birkaç eşit adım için `variant="segments"`) | Yüzde uyduran sahte çubuk, sayfanın ortasında spinner |
+| Puan, hazırlık skoru | `RadialMeter variant="gauge"` + `bands` | Renkle tek başına durum anlatan halka |
+| Adım işaretinin şekli | Kökte bir kez `StepMarkerProvider shape` (`diamond` varsayılan; `circle`, `square`, `pill`) | Her bileşene ayrı ayrı farklı şekil |
 | Storefront script kur/güncelle/kaldır | `ScriptInstaller` | Elle yazılmış kur butonu, onaysız kaldırma |
 | Grafik çerçevesi (başlık, değer, aralık) | `ChartCard` | Her grafik için özel kart başlığı |
 
