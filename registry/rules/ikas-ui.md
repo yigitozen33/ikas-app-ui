@@ -29,6 +29,7 @@ Birden çok bölümü olan uygulama bölümler arasında `PageNav` ile geçer (`
 | Liste veya bölüm yüklenemedi | `RecordTable error` + `onRetry`, bölümde `EmptyState status="danger"` + `onRetry` | Boş tablo, kırmızı düz metin |
 | Kalıcı geri bildirim | `status` ile `Banner` | Renkli `<div>`'ler, emoji, alert() |
 | Geçici geri bildirim | `sonner` paketinden `toast`; kökte bir kez `@/components/ui/sonner` içinden `Toaster` | "Kaydedildi!" için banner |
+| Geçici geri bildirim, ada tarzı (üstte tek yığın) | `@/components/ui/island-toast` içinden `island()`; kökte bir kez `IslandToaster` (`tone`, `position`). Uygulamada ya bu ya `Toaster`, ikisi birden değil | İki toaster'ı yan yana kullanmak, toast başına renk |
 | Kaydedilmemiş form değişiklikleri | `UnsavedBar` | Uzun formun en altında Kaydet butonu |
 | Durum | `status` ile `Badge` (canlı durumlar için + `dot`) | Özel renkli hap etiketler |
 | Değişen durum (bekliyor → eşitleniyor → tamamlandı) | `AnimatedBadge` (`status`, canlı için `media="dot"` + `pulse`) | Durumu yanıp sönen `Badge`, kendi keyframe'i |
@@ -143,6 +144,7 @@ içerik görünür ama tıklanmaz kalır.
 
 - Spring ve eğrileri elle yazmayın: `@/lib/motion` (`SPRING`, `ICON_SPRING`, `EASE_*`, `springOrInstant`)
   veya CSS'te `ease-(--ease-out)` gibi token'ları kullanın.
+- Zıplayan (bounce'lu) yay yalnızca `IslandToaster`'da, `ISLAND_SPRING` ile; başka bileşende bounce kullanmayın.
 - Hover 150ms, içerik belirmesi 150ms / sönmesi 100ms, overlay 300/200ms. Çıkış girişten kısa olur.
 - `transition-all` yasak. Tailwind v4'te `translate-*` / `scale-*` için geçiş listesine
   `translate` ve `scale` yazın (`transform` değil).
